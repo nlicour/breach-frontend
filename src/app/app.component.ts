@@ -7,11 +7,15 @@ import { SafePipe } from './safe.pipe';
   selector: 'app-root',
   imports: [RouterOutlet, SafePipe],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss'  
 })
 export class AppComponent {
   title = 'breach-frontend';
-  message = "<script>alert('XSS');</script>"
+
+  apimSubKey = '7d4194cacd3b42679f621ff66f7a189a';
+
+  message = ""
+  // message = "<script>alert('XSS');</script>"
   
   // htmlSnippet: string = "toto";
   // htmlSnippet: string = "<script>console.log('toto')</script>";
@@ -19,13 +23,13 @@ export class AppComponent {
   
   messages!: any;
   constructor(protected sanitizer: DomSanitizer){
-  this.messages = this.sanitizer.bypassSecurityTrustScript(this.message);
+    this.messages = this.sanitizer.bypassSecurityTrustHtml(this.htmlSnippet);
 
   }
 
   onChange($event:any){
+    console.log($event)
     this.message = $event.target.value;
-    // this.sanitizer.bypassSecurityTrustScript(this.message);
-    // console.log($event)
+    this.messages = this.sanitizer.bypassSecurityTrustHtml(this.message);
   }
 }
